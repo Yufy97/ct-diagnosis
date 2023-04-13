@@ -1,25 +1,64 @@
 package cn.nineseven.service.impl;
 
+import cn.nineseven.constant.AppHttpCodeEnum;
 import cn.nineseven.entity.Result;
 import cn.nineseven.entity.po.Img;
+import cn.nineseven.entity.vo.ImgVo;
+import cn.nineseven.handler.exception.SystemException;
 import cn.nineseven.mapper.ImgMapper;
 import cn.nineseven.service.ImgService;
+import cn.nineseven.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * (Img)表服务实现类
- *
- * @author makejava
- * @since 2023-04-10 21:05:57
- */
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+
+
 @Service("imgService")
 public class ImgServiceImpl extends ServiceImpl<ImgMapper, Img> implements ImgService {
 
+    @Autowired
+    OssServiceImpl ossService;
     @Override
     public Result upload(MultipartFile multipartFile) {
-        return null;
+        String originalFilename = multipartFile.getOriginalFilename();
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        if(!suffix.equals(".jpg") && !suffix.equals(".png") && !suffix.equals(".pdf")){
+            throw new SystemException(AppHttpCodeEnum.FILE_TYPE_ERROR);
+        }
+        String md5 = null;
+        try {
+            InputStream inputStream = multipartFile.getInputStream();
+            md5 = DigestUtils.md5DigestAsHex(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+        Img img = lambdaQuery().eq(Img::getId, md5).one();
+        if(img == null){
+            img = new Img();
+            img.setId(md5);
+            img.setFileName(LocalDate.now().toString());
+            img.setUrl(ossService.upload(multipartFile, md5 + suffix));
+            save(img);
+        }
+        ImgVo imgVo = BeanCopyUtils.copyBean(img, ImgVo.class);
+        return Result.okResult(imgVo);
     }
+
+    @Override
+    public Result updateFileName(String id, String newFileName) {
+        boolean fl = lambdaUpdate().set(Img::getFileName, newFileName).eq(Img::getId, id).update();
+        if(!fl){
+            throw new SystemException(AppHttpCodeEnum.SYSTEM_ERROR);
+        }
+        return Result.okResult();
+    }
+
 }
 

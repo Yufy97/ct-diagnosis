@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         Process proc = null;
-        String[] arr = new String[]{"C:\\Users\\10023\\py\\python.exe", "D:\\Code\\CT\\src\\main\\resources\\test.py", "1", "2"};
+        String[] arr = new String[]{"C:\\Users\\10023\\py\\python.exe", "D:\\Code\\CT\\src\\main\\resources\\analyse.py", "1"};
         try {
             proc = Runtime.getRuntime().exec(arr);
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));

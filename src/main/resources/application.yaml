@@ -32,6 +32,6 @@ mybatis-plus:
 oss:
   accessKey: b1KPcG10Ulk_eQK-ymn1ubbnvyERWIaTHtlsh4S7
   secretKey: QuTiyy2xg7WrYwTpByb6g-xmmwBsIDDNsIJNnFhy
-  bucket: lec-clock
+  bucket: ct-pro
 
 

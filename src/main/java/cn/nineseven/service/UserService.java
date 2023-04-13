@@ -26,5 +26,7 @@ public interface UserService extends IService<User> {
     Result update(UserInfoDto userInfoVo);
 
     Result getInfoById(Long id);
+
+    Result getUserList(Integer pageNum, Integer pageSize, String name, Integer minAge, Integer maxAge, String gender);
 }
 

@@ -1,5 +1,6 @@
 package cn.nineseven.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.nineseven.constant.AppHttpCodeEnum;
 import cn.nineseven.constant.SystemConstant;
 import cn.nineseven.entity.Result;
@@ -15,6 +16,8 @@ import cn.nineseven.service.UserService;
 import cn.nineseven.utils.BeanCopyUtils;
 import cn.nineseven.utils.JWTUtils;
 import cn.nineseven.utils.SecurityUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -90,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result update(UserInfoDto userInfoVo) {
         User user = BeanCopyUtils.copyBean(userInfoVo, User.class);
         updateById(user);
-        return null;
+        return getInfoById(user.getId());
     }
 
     @Override
@@ -98,6 +102,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = getById(id);
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
         return Result.okResult(userInfoVo);
+    }
+
+    @Override
+    public Result getUserList(Integer pageNum, Integer pageSize, String name, Integer minAge, Integer maxAge, String gender) {
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.like(!StrUtil.isBlank(name), User::getNickname, name);
+        lqw.ge(minAge != null , User::getAge, minAge);
+        lqw.le(maxAge != null , User::getAge, maxAge);
+        lqw.eq(!StrUtil.isBlank(gender), User::getGender, gender);
+
+        Page<User> page = new Page<>(pageNum, pageSize);
+        page(page, lqw);
+
+        List<User> users = page.getRecords();
+        List<UserInfoVo> userInfoVos = BeanCopyUtils.copyBeanList(users, UserInfoVo.class);
+
+        return Result.okResult(userInfoVos);
     }
 }
 

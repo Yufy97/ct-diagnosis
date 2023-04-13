@@ -1,6 +1,9 @@
 package cn.nineseven.service;
 
+import cn.nineseven.entity.Result;
+import cn.nineseven.entity.dto.CtRecordDto;
 import cn.nineseven.entity.po.CtRecord;
+import cn.nineseven.entity.po.Img;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -12,5 +15,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CtRecordService extends IService<CtRecord> {
 
+    Result analyse(String url);
+
+    Result saveRecord(CtRecordDto ctRecordDto);
+
+    Result getByUserId(Long userId, Integer pageNum, Integer pageSize, Integer timeSort);
+
+    Result selectById(Long id);
 }
 

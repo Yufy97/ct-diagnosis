@@ -15,5 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ImgService extends IService<Img> {
 
     Result upload(MultipartFile multipartFile);
+
+    Result updateFileName(String id, String newFileName);
 }
 

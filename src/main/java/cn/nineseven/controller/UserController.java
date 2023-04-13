@@ -27,22 +27,35 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("登录")
-    public Result login(@RequestBody LoginUserDto loginUserDto){
+    public Result login(@RequestBody @Validated LoginUserDto loginUserDto){
         return userService.login(loginUserDto);
     }
 
     @PostMapping("/logout")
+    @ApiOperation("退出登录")
     public Result logout(){
         return userService.logout();
     }
 
     @PutMapping("/update")
+    @ApiOperation("修改个人信息")
     public Result update(@RequestBody UserInfoDto userInfoDto){
         return userService.update(userInfoDto);
     }
 
     @GetMapping("/info/{id}")
+    @ApiOperation("获取用户信息")
     public Result getInfoById(@PathVariable("id") Long id){
         return userService.getInfoById(id);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("用户信息列表")
+    public Result getUserList(Integer pageNum, Integer pageSize,
+                              @RequestParam(required = false) String name,
+                              @RequestParam(required = false) Integer minAge,
+                              @RequestParam(required = false) Integer maxAge,
+                              @RequestParam(required = false) String gender){
+        return userService.getUserList(pageNum, pageSize, name, minAge, maxAge, gender);
     }
 }
