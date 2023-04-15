@@ -19,6 +19,9 @@ import cn.nineseven.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -102,6 +106,20 @@ public class CtRecordServiceImpl extends ServiceImpl<CtRecordMapper, CtRecord> i
         ctAnalyseVo.setUrl(imgService.getById(ctRecord.getImgId()).getUrl());
         BeanUtils.copyProperties(ctRecord, ctAnalyseVo);
         return Result.okResult(ctAnalyseVo);
+    }
+
+    @Override
+    public Result dataAnalyse(Integer option) {
+        CtRecordMapper mapper = getBaseMapper();
+        switch (option){
+            case 1:
+                return Result.okResult(mapper.dataAnalyseAll());
+            case 2:
+                return Result.okResult(mapper.dataAnalyseByGender("男"));
+            case 3:
+                return Result.okResult(mapper.dataAnalyseByGender("女"));
+        }
+        return null;
     }
 
     private String executePy(String[] arr){

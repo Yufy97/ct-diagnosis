@@ -22,5 +22,9 @@ public interface CtRecordService extends IService<CtRecord> {
     Result getByUserId(Long userId, Integer pageNum, Integer pageSize, Integer timeSort);
 
     Result selectById(Long id);
+
+    Result dataAnalyse(Integer option);
+
+
 }
 
