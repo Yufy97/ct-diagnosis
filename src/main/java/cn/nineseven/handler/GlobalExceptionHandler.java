@@ -25,7 +25,8 @@ public class GlobalExceptionHandler  {
 
     @ExceptionHandler(SystemException.class)
     public Result systemExceptionHandler(SystemException e){
-        log.error("{}", e.getMessage());
+        log.error(" ", e);
+//        log.error("{}", e.getMessage());
         return Result.errorResult(e.getCode(),e.getMsg());
     }
 
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler  {
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e){
 
-        log.error("{}", e.getMessage());
+        log.error(" ", e);
         Result result = null;
         if(e instanceof BadCredentialsException){
             result = Result.errorResult(AppHttpCodeEnum.LOGIN_ERROR.getCode(),e.getMessage());

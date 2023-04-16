@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class IssueListVo {
+public class IssueVo {
     private Long id;
 
     private Long userId;
@@ -15,10 +15,6 @@ public class IssueListVo {
     private String content;
 
     private String url;
-
-    private Integer isReply;
-
-    private Integer isPublic;
 
     private Date createTime;
 }

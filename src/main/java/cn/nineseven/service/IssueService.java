@@ -1,6 +1,7 @@
 package cn.nineseven.service;
 
 import cn.nineseven.entity.Result;
+import cn.nineseven.entity.dto.IssueDto;
 import cn.nineseven.entity.po.Issue;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,6 +14,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IssueService extends IService<Issue> {
 
-    Result list(Integer pageNum, Integer pageSize, Integer isReply);
+    Result list(Integer pageNum, Integer pageSize, Integer isReply, Integer isPublic);
+
+    Result save(IssueDto issueDto);
+
+    Result selectById(Long id);
 }
 

@@ -1,8 +1,9 @@
 package cn.nineseven.mapper;
 
 import cn.nineseven.entity.po.Issue;
-import cn.nineseven.entity.vo.IssueListVo;
+import cn.nineseven.entity.vo.IssueVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -16,9 +17,13 @@ import java.util.List;
  */
 public interface IssueMapper extends BaseMapper<Issue> {
 
-    @Select("SELECT id,user_id,content,url,is_reply,is_public,create_time,update_time,is_del FROM issue WHERE is_del=0 ORDER BY create_time DESC LIMIT ?,?")
-    List<IssueListVo> list(Integer pageNum, Integer pageSize, Integer isReply);
-
-    List<IssueListVo> list(Integer pageNum, Integer pageSize);
+    @Select("<script>SELECT issue.id, issue.user_id,u.nickname, content,url, issue.create_time,issue.update_time FROM issue\n" +
+            "left join user u on u.id = issue.user_id\n" +
+            "WHERE issue.is_del=0 " +
+            "<if test=\"isReply != null\"> AND issue.is_reply = #{isReply} </if>" +
+            "<if test=\"isPublic != null\"> AND issue.is_public = #{isPublic} </if>\n" +
+            "ORDER BY issue.create_time DESC LIMIT #{pageNum}, #{pageSize} </script>")
+    List<IssueVo> list(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize,
+                       @Param("isReply") Integer isReply, @Param("isPublic") Integer isPublic);
 }
 

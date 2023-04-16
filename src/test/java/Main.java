@@ -1,25 +1,49 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
+    static PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
     public static void main(String[] args) {
-
-        Process proc = null;
-        String[] arr = new String[]{"C:\\Users\\10023\\py\\python.exe", "D:\\Code\\CT\\src\\main\\resources\\analyse.py", "1"};
-        try {
-            proc = Runtime.getRuntime().exec(arr);
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
+        Scanner sc = new Scanner(System.in);
+        int n = sc. nextInt();
+        int[] a = new int[n];
+        List<Boolean> fl = new ArrayList<>();
+        a[0] = 2;a[1] = 4;a[2] = 1;
+        for(int i = 0; i < n; i++){
+            a[i] = sc.nextInt();
+            for(int j = 0; j < a[i]; j++){
+                fl.add(true);
             }
-            in.close();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            fl.add(false);
         }
+        int mod = fl.size();
+        String s;
+        int cnt = 0;
+        while(!(s = sc.next()).equals("End")){
+            if(s.equals("ChuiZi")){
+                if(fl.get(cnt % mod)){
+                    writer.println("Bu");
+                }else{
+                    writer.println("JianDao");
+                }
+            } else if(s.equals("JianDao")){
+                if(fl.get(cnt % mod)){
+                    writer.println("ChuiZi");
+                }else{
+                    writer.println("Bu");
+                }
+            } else if(s.equals("Bu")){
+                if(fl.get(cnt % mod)){
+                    writer.println("JianDao");
+                }else{
+                    writer.println("ChuiZi");
+                }
+            }
+            cnt++;
+        }
+        writer.flush();
     }
 }

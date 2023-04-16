@@ -12,16 +12,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * (Issue)表实体类
+ * (Reply)表实体类
  *
  * @author makejava
- * @since 2023-04-14 20:47:15
+ * @since 2023-04-15 12:44:09
  */
-@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Issue {
+public class Reply {
 
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -30,11 +29,9 @@ public class Issue {
     
     private String content;
     
-    private String url;
+    private Long rootIssueId;
     
-    private Integer isReply;
-    
-    private Integer isPublic;
+    private Long replyUserId;
 
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
