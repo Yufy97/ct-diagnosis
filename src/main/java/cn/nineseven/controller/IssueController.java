@@ -3,9 +3,7 @@ package cn.nineseven.controller;
 import cn.nineseven.entity.Result;
 import cn.nineseven.entity.dto.IssueDto;
 import cn.nineseven.entity.po.Issue;
-import cn.nineseven.entity.vo.IssueVo;
 import cn.nineseven.service.IssueService;
-import cn.nineseven.utils.BeanCopyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,16 +14,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/issue")
-@Api("问题留言接口")
+@Api(tags = "问题留言接口")
 public class IssueController {
 
     @Autowired
     IssueService issueService;
     @GetMapping("/list")
     @ApiOperation("获取问题列表")
-    @ApiImplicitParams({@ApiImplicitParam(name = "isReply", value = "是否回复，0未回复， 1已回复"),
-                        @ApiImplicitParam(name = "isPublic", value = "是否公开，0不公开， 1公开")})
-    public Result list(Integer pageNum, Integer pageSize, @RequestParam(required = false) Integer isReply, @RequestParam(required = false) Integer isPublic){
+    @ApiImplicitParams({@ApiImplicitParam(name = "isReply", value = "是否回复，0未回复， 1已回复(非必要参数)"),
+                        @ApiImplicitParam(name = "isPublic", value = "是否公开，0不公开， 1公开(非必要参数)")})
+    public Result list(Integer pageNum, Integer pageSize,
+                       @RequestParam(required = false) Integer isReply,
+                       @RequestParam(required = false) Integer isPublic){
         return issueService.list(pageNum, pageSize, isReply, isPublic);
     }
 
@@ -49,7 +49,7 @@ public class IssueController {
         return Result.okResult();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @ApiOperation("id获取问题")
     public Result getById(@PathVariable("id") Long id){
         return issueService.selectById(id);

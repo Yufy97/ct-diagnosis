@@ -43,7 +43,7 @@ public class ImgServiceImpl extends ServiceImpl<ImgMapper, Img> implements ImgSe
         if(img == null){
             img = new Img();
             img.setId(md5);
-            img.setFileName(LocalDate.now().toString());
+            img.setFileName(md5.substring(16));
             img.setUrl(ossService.upload(multipartFile, md5 + suffix));
             save(img);
         }

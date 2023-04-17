@@ -8,4 +8,4 @@ if __name__ == '__main__':
 #     for i in range(1, len(sys.argv)):
 #         a.append((int(sys.argv[i])))
 
-    print('1=aaaa')
+    print('1=肺部情况健康捏')

@@ -13,7 +13,7 @@ public class CtRecordDto {
     @NotNull
     private Integer status;
     @NotNull
-    private String description;
+    private String analyse;
     @NotNull
     private String forecast;
 }

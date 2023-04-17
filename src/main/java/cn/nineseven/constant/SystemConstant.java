@@ -12,5 +12,5 @@ public class SystemConstant {
     public static String REDIS_LOGIN_USER = "user:login:";
 
 
-    public static String OSS_URL = "rsxhtyk2s.hn-bkt.clouddn.com/";
+    public static String OSS_URL = "qiniu.gwithl.cn/";
 }

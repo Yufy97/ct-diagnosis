@@ -4,7 +4,6 @@ import cn.nineseven.constant.SystemConstant;
 import cn.nineseven.entity.Result;
 import cn.nineseven.entity.dto.CtRecordDto;
 import cn.nineseven.entity.po.CtRecord;
-import cn.nineseven.entity.po.Img;
 import cn.nineseven.entity.po.User;
 import cn.nineseven.entity.vo.CtAnalyseVo;
 import cn.nineseven.entity.vo.CtRecordVo;
@@ -19,11 +18,9 @@ import cn.nineseven.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -31,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,12 +45,24 @@ public class CtRecordServiceImpl extends ServiceImpl<CtRecordMapper, CtRecord> i
     UserService userService;
     @Override
     public Result analyse(String url) {
-        String[] analyseArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\analyse.py", url};
+//        String[] analyseArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\analyse.py", url};
+        String[] analyseArr = new String[0];
+        try {
+            analyseArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, new ClassPathResource("analyse.py").getFile().getPath(), url};
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         String s = executePy(analyseArr);
         String[] split = s.split("=");
         Integer status = Integer.valueOf(split[0]);
         String analyse = split[1];
-        String[] forecastArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\forecast.py", url};
+//        String[] forecastArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\forecast.py", url};
+        String[] forecastArr = new String[0];
+        try {
+            forecastArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, new ClassPathResource("forecast.py").getFile().getPath(), url};
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         String forecast = executePy(forecastArr);
 
         User user = SecurityUtils.getLoginUser().getUser();
