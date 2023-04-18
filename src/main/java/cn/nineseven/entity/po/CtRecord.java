@@ -33,6 +33,8 @@ public class CtRecord {
     private Integer status;
     
     private String analyse;
+
+    private Integer isAnalysing;
     
     private String forecast;
 

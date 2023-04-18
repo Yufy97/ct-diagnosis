@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,18 +21,12 @@ public class CtRecordController {
     @Autowired
     CtRecordService ctRecordService;
 
-    @GetMapping("/analyse")
+    @PostMapping("/analyse")
     @ApiOperation("ct分析")
-    @ApiImplicitParams(@ApiImplicitParam(name = "url", value = "图片url"))
-    public Result analyse(String url){
-        return ctRecordService.analyse(url);
+    public Result analyse(@RequestBody CtRecordDto ctRecordDto){
+        return ctRecordService.analyse(ctRecordDto);
     }
 
-    @PostMapping("/saveRecord")
-    @ApiOperation("保存分析记录")
-    public Result saveRecord(@RequestBody @Validated CtRecordDto ctRecordDto){
-        return ctRecordService.saveRecord(ctRecordDto);
-    }
 
     @GetMapping("/user/{userId}")
     @ApiOperation("用户id查询用户的ct分析记录")

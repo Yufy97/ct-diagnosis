@@ -15,9 +15,11 @@ import cn.nineseven.service.ImgService;
 import cn.nineseven.service.UserService;
 import cn.nineseven.utils.BeanCopyUtils;
 import cn.nineseven.utils.SecurityUtils;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,45 +46,13 @@ public class CtRecordServiceImpl extends ServiceImpl<CtRecordMapper, CtRecord> i
     ImgService imgService;
     @Autowired
     UserService userService;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
     @Override
-    public Result analyse(String url) {
-//        String[] analyseArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\analyse.py", url};
-        String[] analyseArr = new String[0];
-        try {
-            analyseArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, new ClassPathResource("analyse.py").getFile().getPath(), url};
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String s = executePy(analyseArr);
-        String[] split = s.split("=");
-        Integer status = Integer.valueOf(split[0]);
-        String analyse = split[1];
-//        String[] forecastArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, "D:\\Code\\CT\\src\\main\\resources\\forecast.py", url};
-        String[] forecastArr = new String[0];
-        try {
-            forecastArr = new String[]{SystemConstant.PYTHON_ENVIRONMENT, new ClassPathResource("forecast.py").getFile().getPath(), url};
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String forecast = executePy(forecastArr);
-
-        User user = SecurityUtils.getLoginUser().getUser();
-        CtAnalyseVo ctAnalyseVo = BeanCopyUtils.copyBean(user, CtAnalyseVo.class);
-        ctAnalyseVo.setStatus(status);
-        ctAnalyseVo.setAnalyse(analyse);
-        ctAnalyseVo.setForecast(forecast);
-        ctAnalyseVo.setUrl(url);
-        ctAnalyseVo.setCreateTime(LocalDateTime.now());
-        return Result.okResult(ctAnalyseVo);
-    }
-
-    @Override
-    public Result saveRecord(CtRecordDto ctRecordDto) {
-        CtRecord ctRecord = BeanCopyUtils.copyBean(ctRecordDto, CtRecord.class);
-        ctRecord.setUserId(SecurityUtils.getUserId());
-
-        save(ctRecord);
-        return Result.okResult();
+    public Result analyse(CtRecordDto ctRecordDto) {
+        String json = JSON.toJSONString(ctRecordDto);
+        rabbitTemplate.convertAndSend(SystemConstant.QUEUE_NAME, json);
+        return Result.okResult(200, "正在进行分析，请稍后在个人记录中查看");
     }
 
     @Override
@@ -128,26 +99,6 @@ public class CtRecordServiceImpl extends ServiceImpl<CtRecordMapper, CtRecord> i
                 return Result.okResult(mapper.dataAnalyseByGender("女"));
         }
         return null;
-    }
-
-    private String executePy(String[] arr){
-        Process proc = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            proc = Runtime.getRuntime().exec(arr);
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                sb.append(line);
-            }
-            in.close();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 
 }

@@ -15,9 +15,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CtRecordService extends IService<CtRecord> {
 
-    Result analyse(String url);
+    Result analyse(CtRecordDto ctRecordDto);
 
-    Result saveRecord(CtRecordDto ctRecordDto);
 
     Result getByUserId(Long userId, Integer pageNum, Integer pageSize, Integer timeSort);
 

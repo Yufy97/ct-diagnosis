@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()		//使用and()返回一个HttpSecurity对象继续配置
                 .authorizeRequests()  //返回对请求的配置对象
                 .antMatchers("/user/login", "/user/register").anonymous()	//设置匿名访问路径，已登录不能访问，未登录能访问
-                .antMatchers("/doc.html**","/issue/list", "/issue/get/**", "/reply/list/**").permitAll()	//设置都能通行的路径
+                .antMatchers("/doc.html**", "/webjars/**","/v2/**","/swagger**" ,"/issue/list", "/issue/get/**", "/reply/list/**").permitAll()	//设置都能通行的路径
                 .anyRequest().authenticated();	//anyRequest()其他任意请求对象，authenticated()已认证的都能访问
 
 //        http.exceptionHandling()

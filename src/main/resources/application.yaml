@@ -19,6 +19,13 @@ spring:
       max-idle: 8
       min-idle: 0
       max-wait: -1
+
+  rabbitmq:
+    host: 162.14.106.166
+    port: 5672
+    virtual-host: ct
+    username: myf
+    password: 123
 mybatis-plus:
   configuration:
     # 日志

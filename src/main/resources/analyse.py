@@ -1,4 +1,7 @@
+
 import sys
+import io
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 
 def func(a,b):
     return (a+b)

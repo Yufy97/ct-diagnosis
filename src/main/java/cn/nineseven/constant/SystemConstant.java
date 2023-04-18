@@ -3,7 +3,7 @@ package cn.nineseven.constant;
 public class SystemConstant {
 
 
-
+    public static final String QUEUE_NAME = "ct.analyse";
 
     private SystemConstant(){}
     public static String PYTHON_ENVIRONMENT = "C:\\Users\\10023\\py\\python.exe";

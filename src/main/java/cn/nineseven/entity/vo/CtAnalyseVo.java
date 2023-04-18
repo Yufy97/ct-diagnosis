@@ -18,6 +18,8 @@ public class CtAnalyseVo {
 
     private String analyse;
 
+    private Integer isAnalysing;
+
     private String forecast;
 
     private String url;
