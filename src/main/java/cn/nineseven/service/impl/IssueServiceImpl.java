@@ -4,6 +4,7 @@ import cn.nineseven.constant.AppHttpCodeEnum;
 import cn.nineseven.entity.Result;
 import cn.nineseven.entity.dto.IssueDto;
 import cn.nineseven.entity.po.Issue;
+import cn.nineseven.entity.po.User;
 import cn.nineseven.entity.vo.IssueVo;
 import cn.nineseven.entity.vo.PageVo;
 import cn.nineseven.handler.exception.SystemException;
@@ -51,6 +52,15 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
         IssueVo issueVo = BeanCopyUtils.copyBean(issue, IssueVo.class);
         issueVo.setNickname(userService.getById(issueVo.getUserId()).getNickname());
         return Result.okResult(issueVo);
+    }
+
+    @Override
+    public Result selectByUserId(Long id) {
+        List<Issue> issues = lambdaQuery().eq(Issue::getUserId, id).list();
+        String nickname = userService.getById(id).getNickname();
+        List<IssueVo> issueVos = BeanCopyUtils.copyBeanList(issues, IssueVo.class);
+        issueVos.stream().forEach(issueVo -> issueVo.setNickname(nickname));
+        return Result.okResult(issueVos);
     }
 }
 

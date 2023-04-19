@@ -54,4 +54,10 @@ public class IssueController {
     public Result getById(@PathVariable("id") Long id){
         return issueService.selectById(id);
     }
+
+    @GetMapping("/user/{id}")
+    @ApiOperation(("根据userId获取该用户的提问记录"))
+    public Result getByUserId(@PathVariable("id") Long id){
+        return issueService.selectByUserId(id);
+    }
 }

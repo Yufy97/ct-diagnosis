@@ -19,5 +19,7 @@ public interface IssueService extends IService<Issue> {
     Result save(IssueDto issueDto);
 
     Result selectById(Long id);
+
+    Result selectByUserId(Long id);
 }
 
