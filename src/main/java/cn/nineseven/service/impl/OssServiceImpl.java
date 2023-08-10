@@ -41,7 +41,7 @@ public class OssServiceImpl {
             String upToken = auth.uploadToken(bucket);
             try {
                 Response response = uploadManager.put(inputStream, filePath, upToken,null, null);
-                return SystemConstant.OSS_URL + filePath;
+                return "http://" + SystemConstant.OSS_URL + filePath;
             } catch (QiniuException ex) {
                 Response r = ex.response;
                 System.err.println(r.toString());
@@ -56,5 +56,4 @@ public class OssServiceImpl {
         }
         return null;
     }
-
 }

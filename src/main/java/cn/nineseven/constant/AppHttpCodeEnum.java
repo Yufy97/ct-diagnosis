@@ -12,16 +12,19 @@ public enum AppHttpCodeEnum {
 
     EMPTY_PARAMS_ERROR(407, "参数不能为空"),
     SYSTEM_ERROR(500,"出现错误"),
-    USERNAME_EXIST(501,"用户名已存在"),
-    PHONENUMBER_EXIST(502,"手机号已存在"),
-    EMAIL_EXIST(503, "邮箱已存在"),
-    REQUIRE_USERNAME(504, "必需填写用户名"),
-    LOGIN_ERROR(505,"用户名或密码错误"),
-    CODE_SEND_ERROR(408, "验证码发送失败"),
-    DIFFERENT_PASSWORD(407, "两次密码不一致"),
+    USERNAME_EXIST(411,"用户名已存在"),
+    PHONENUMBER_EXIST(412,"手机号已存在"),
+    EMAIL_EXIST(413, "邮箱已存在"),
+    REQUIRE_USERNAME(414, "必需填写用户名"),
+    LOGIN_ERROR(415,"用户名或密码错误"),
+    CODE_SEND_ERROR(416, "验证码发送失败"),
+    DIFFERENT_PASSWORD(417, "两次密码不一致"),
     FILE_EXIST(408, "文件已存在"),
 
-    FILE_SIZE_ERROR(409, "文件过大");
+    FILE_SIZE_ERROR(409, "文件过大"),
+    ANALYSE_ERROR(510, "分析出现错误，请稍后重试"),
+
+    ;
     int code;
     String msg;
 

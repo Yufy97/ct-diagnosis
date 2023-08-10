@@ -35,8 +35,6 @@ public class CtRecord {
     private String analyse;
 
     private Integer isAnalysing;
-    
-    private String forecast;
 
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;

@@ -1,21 +1,31 @@
 package cn.nineseven.service.impl;
 
 import cn.nineseven.constant.AppHttpCodeEnum;
+import cn.nineseven.constant.SystemConstant;
 import cn.nineseven.entity.Result;
+import cn.nineseven.entity.dto.CtRecordDto;
+import cn.nineseven.entity.po.CtRecord;
 import cn.nineseven.entity.po.Img;
 import cn.nineseven.entity.vo.ImgVo;
 import cn.nineseven.handler.exception.SystemException;
 import cn.nineseven.mapper.ImgMapper;
+import cn.nineseven.service.CtRecordService;
 import cn.nineseven.service.ImgService;
 import cn.nineseven.utils.BeanCopyUtils;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 
@@ -24,6 +34,7 @@ public class ImgServiceImpl extends ServiceImpl<ImgMapper, Img> implements ImgSe
 
     @Autowired
     OssServiceImpl ossService;
+
     @Override
     public Result upload(MultipartFile multipartFile) {
         String originalFilename = multipartFile.getOriginalFilename();
@@ -59,6 +70,5 @@ public class ImgServiceImpl extends ServiceImpl<ImgMapper, Img> implements ImgSe
         }
         return Result.okResult();
     }
-
 }
 

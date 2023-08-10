@@ -24,7 +24,7 @@ public class SpringRabbitListener {
     @Autowired
     CtRecordService ctRecordService;
 
-    @RabbitListener(queues = SystemConstant.QUEUE_NAME, concurrency = "5-10")
+//    @RabbitListener(queues = SystemConstant.QUEUE_NAME, concurrency = "5-10")
     public void analyseCt(String json){
 
         CtRecordDto ctRecordDto =  JSON.parseObject(json, CtRecordDto.class);
@@ -57,7 +57,6 @@ public class SpringRabbitListener {
         ctRecord.setIsAnalysing(0);
         ctRecord.setStatus(status);
         ctRecord.setAnalyse(analyse);
-        ctRecord.setForecast(forecast);
         ctRecordService.updateById(ctRecord);
     }
 
